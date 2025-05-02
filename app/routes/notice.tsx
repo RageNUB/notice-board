@@ -1,7 +1,6 @@
 // app/routes/notice.tsx (or add inside `home.tsx` if preferred)
 import { useEffect, useState } from "react";
 import NoticeCard from "../components/NoticeCard";
-import { db } from "~/lib/firebase"; // make sure this exports Firestore instance
 import { collection, getDocs } from "firebase/firestore";
 import type { Notice } from "~/lib/types";
 import { motion } from "framer-motion";
@@ -10,15 +9,22 @@ export default function NoticeBoard() {
   const [notices, setNotices] = useState<Notice[]>([]);
 
   useEffect(() => {
-    const fetchNotices = async () => {
-      const res = await fetch("http://localhost:5000/api/notices");
-      const data = await res.json();
-      setNotices(data);
-      console.log(notices.length)
-      console.log(notices)
-    };
+    fetch("http://localhost:5000/api/notices")
+        .then(res => res.json())
+        .then(data => setNotices(data))
+        .catch(err => console.log(err));
 
-    fetchNotices();
+
+    // const fetchNotices = async () => {
+    //   const res = await fetch("http://localhost:5000/api/notices");
+    //   const data = await res.json();
+    //   setNotices(data);
+    //   console.log(notices.length)
+    //   console.log(notices)
+    // };
+    // // console.log(process.env.APP_apiKey);
+
+    // fetchNotices();
   }, []);
 
   return (
